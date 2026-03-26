@@ -42,26 +42,37 @@ public class App {
         Integer[] vetor = gerarVetorObjetos(tam);
 
         BubbleSort<Integer> bolha = new BubbleSort<>();
-
-        Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
-
-        System.out.println("\nVetor ordenado método Bolha:");
-        System.out.println("Comparações: " + bolha.getComparacoes());
-        System.out.println("Movimentações: " + bolha.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
+        Integer[] vetorOrdenadoBolha = statsOrdenacao(bolha, vetor, "BubbleSort");
+        imprimirVetor(vetorOrdenadoBolha);
 
         InsertionSort<Integer> insercao = new InsertionSort<>();
+        Integer[] vetorOrdenadoInsercao = statsOrdenacao(insercao, vetor, "InsertionSort");
+        imprimirVetor(vetorOrdenadoInsercao);
 
-        Integer[] vetorOrdenadoInsercao = insercao.ordenar(vetor);
+        SelectionSort<Integer> selecao = new SelectionSort<>();
+        Integer[] vetorOrdenadoSelecao = statsOrdenacao(selecao, vetor, "SelectionSort");
+        imprimirVetor(vetorOrdenadoSelecao);
+    }
 
-        System.out.println("\nVetor ordenado método Inserção:");
-        System.out.println("Comparações: " + insercao.getComparacoes());
-        System.out.println("Movimentações: " + insercao.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + insercao.getTempoOrdenacao());
+    private static <T extends Comparable<T>> T[] statsOrdenacao(IOrdenador<T> ordenador, T[] vetor, String nomeOrdenacao) {
+        T[] vetorOrdenado = ordenador.ordenar(vetor);
 
-        /* TO DO
-        *Fazer a implementacao do restante do main para a ordenacao 
-        *  com os algoritmos InsertionSort e SelectionSort
-        */
+        System.out.println("\nVetor ordenado método " + nomeOrdenacao + ":");
+        System.out.println("Comparações: " + ordenador.getComparacoes());
+        System.out.println("Movimentações: " + ordenador.getMovimentacoes());
+        System.out.println("Tempo de ordenação (ms): " + ordenador.getTempoOrdenacao());
+
+        return vetorOrdenado;
+    }
+
+    private static <T> void imprimirVetor(T[] vetor) {
+        StringBuilder builder = new StringBuilder("Vetor: ");
+
+        for(int i = 0; i < vetor.length; i++) {
+            String pontuacao = i == vetor.length - 1 ? ". " : ", ";
+            builder.append(vetor[i] + pontuacao);
+        }
+
+        System.out.println(builder.toString());
     }
 }
