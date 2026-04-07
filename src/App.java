@@ -69,9 +69,10 @@ public class App {
                     esperar(teclado);
                     break;
                 case 4:
-                    System.out.println("TO-DO");
+                    MergeSort<Integer> merge = new MergeSort<>();
+                    Integer[] vetorOrdenadoMerge = statsOrdenacao(merge, vetor, "MergeSort");
+                    imprimirVetor(vetorOrdenadoMerge);
                     esperar(teclado);
-
                     break;
                 case 0:
                     break;
