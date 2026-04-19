@@ -130,15 +130,73 @@ public class AppOficina {
     static Produto localizarProduto() {
         cabecalho();
         System.out.println("Localizando um produto");
-        int numero = lerNumero("Digite o identificador do produto", Integer.class);
         Produto localizado = null;
+
+        IOrdenador<Produto> ordenador = new Mergesort<>();
+        Produto[] produtosParaBusca;
         
-        for (int i = 0; i < quantProdutos && localizado == null; i++) {
-            if (produtos[i].hashCode() == numero)
-                localizado = produtos[i];
+        int opcao = lerNumero("Gostaria de buscar por ID (1) ou por descrição (2)? Insira sua opção: ", Integer.class);
+
+        switch(opcao) {
+            case 1:
+                produtosParaBusca = ordenador.ordenar(produtos, new ComparadorPorCodigo());
+                int codigo = lerNumero("Digite o ID a ser buscado: ", Integer.class);
+                localizado = buscaBinariaPorId(produtosParaBusca, codigo);
+                break;
+            case 2:
+                produtosParaBusca = ordenador.ordenar(produtos, new ComparadorPorDescricao());
+                System.out.print("Insira a descrição a ser buscada: ");
+                String descricao = teclado.nextLine();
+                localizado = buscaBinariaPorDescricao(produtosParaBusca, descricao);
+                break;
+            default:
+                throw new IllegalArgumentException("Opção de busca inválida!");
         }
+
         return localizado;
     }
+
+    public static Produto buscaBinariaPorId(Produto[] vetor, int id) {
+	    return buscaBinariaPorId(vetor, id, 0, vetor.length - 1);
+	} 
+	
+	public static Produto buscaBinariaPorId(Produto[] vetor, int id, int posInicial, int posFinal) {
+        Produto resultado = null;
+	    
+	    int alvo = posInicial + ((posFinal - posInicial) / 2);
+	    
+	    if(posInicial == posFinal && vetor[alvo].getId() != id) {
+            resultado = null;
+	    } else if(vetor[alvo].getId() == id) {
+	        resultado = vetor[alvo];
+        } else if(vetor[alvo].getId() < id) {
+            resultado = buscaBinariaPorId(vetor, id, alvo + 1, posFinal); 
+        } else if(vetor[alvo].getId() > id)
+            resultado = buscaBinariaPorId(vetor, id, posInicial, alvo);
+            
+        return resultado;
+	}
+
+    public static Produto buscaBinariaPorDescricao(Produto[] vetor, String descricao) {
+	    return buscaBinariaPorDescricao(vetor, descricao, 0, vetor.length - 1);
+	} 
+	
+	public static Produto buscaBinariaPorDescricao(Produto[] vetor, String descricao, int posInicial, int posFinal) {
+        Produto resultado = null;
+	    
+	    int alvo = posInicial + ((posFinal - posInicial) / 2);
+	    
+	    if(posInicial == posFinal && !(vetor[alvo].getDescricao().equals(descricao))) {
+            resultado = null;
+	    } else if(vetor[alvo].getDescricao().equals(descricao)) {
+	        resultado = vetor[alvo];
+        } else if(vetor[alvo].getDescricao().hashCode() < descricao.hashCode()) {
+            resultado = buscaBinariaPorDescricao(vetor, descricao, alvo + 1, posFinal); 
+        } else if(vetor[alvo].getDescricao().hashCode() > descricao.hashCode())
+            resultado = buscaBinariaPorDescricao(vetor, descricao, posInicial, alvo);
+            
+        return resultado;
+	}
 
     private static void mostrarProduto(Produto produto) {
         cabecalho();
