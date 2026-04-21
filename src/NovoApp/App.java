@@ -245,48 +245,7 @@ public class App {
             return;
         }
 
-        IOrdenator<Pedido> ordenador = new Mergesort<>(new ComparadorCriterioA());
-        Pedido[] pedidosOrdenados = ordenador.ordenar(pedidosCadastrados);
-
-        int indicePedidoMaisBarato;
-        
-        indicePedidoMaisBarato = pedidoMaisBarato(pedidosOrdenados, valorCorte);
-
-        
-        if(indicePedidoMaisBarato == -1)
-            System.out.println("Não há pedidos com valor acima de R$ " + valorCorte + ".\n");
-        else {
-            StringBuilder builder = new StringBuilder("Pedidos com valor acima de R$ " + valorCorte + ": \n");
-
-            for(int i = indicePedidoMaisBarato; i < quantPedidos; i++) {
-                builder.append(pedidosOrdenados[i].toString() + "\n");
-            }
-
-            System.out.println(builder.toString());
-        }
-    }
-
-    static int pedidoMaisBarato(Pedido[] pedidos, double corte) {
-        return buscaBinaria(pedidos, corte);
-    }
-
-    static int buscaBinaria(Pedido[] pedidos, double corte) {
-        return buscaBinaria(pedidos, corte, 0, quantPedidos - 1);
-    }
-
-    static int buscaBinaria(Pedido[] pedidos, double corte, int posInicial, int posFinal) {
-        int alvo = posInicial + ((posFinal - posInicial + 1) / 2);
-
-        if(posFinal == posInicial && pedidos[posInicial].valorFinal() < corte)
-            return -1;
-
-        if(posFinal == posInicial && pedidos[posInicial].valorFinal() >= corte)
-            return alvo;
-
-        if(pedidos[alvo].valorFinal() <= corte) 
-            return buscaBinaria(pedidos, corte, alvo + 1, posFinal);
-        
-        return buscaBinaria(pedidos, corte, posInicial, alvo - 1);
+       
     }
 
     static int exibirMenuOrdenadores() {
